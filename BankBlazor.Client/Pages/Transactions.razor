@@ -1,1 +1,59 @@
-﻿
+﻿@page "/transactions"
+@using BankBlazor.Client.Models
+<PageTitle>Transactions</PageTitle>
+
+<h2>Account Transactions</h2>
+
+<div class="account">
+    <p><strong>Account Number:</strong> @accountNumber</p>
+    <p><strong>Balance:</strong> $@balance</p>
+</div>
+
+<div class="buttons">
+    <button @onclick="Deposit">Deposit</button>
+    <button @onclick="Withdraw">Withdraw</button>
+    <button @onclick="Transfer">Transfer</button>
+</div>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p><em>@message</em></p>
+}
+
+@code {
+    private string accountNumber = "123456789";
+    private decimal balance = 5000m;
+    private string? message;
+
+    private void Deposit()
+    {
+        balance += 500;
+        message = "Deposited $500.";
+    }
+
+    private void Withdraw()
+    {
+        if (balance >= 500)
+        {
+            balance -= 500;
+            message = "Withdrew $500.";
+        }
+        else
+        {
+            message = "Insufficient funds.";
+        }
+    }
+
+    private void Transfer()
+    {
+        if (balance >= 1000)
+        {
+            balance -= 1000;
+            message = "Transferred $1000.";
+        }
+        else
+        {
+            message = "Insufficient funds for transfer.";
+        }
+    }
+}
