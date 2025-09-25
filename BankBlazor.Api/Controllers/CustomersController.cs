@@ -1,5 +1,5 @@
 using BankBlazor.Api.Data.Context;
-using BankBlazor.Api.Data.Entities;
+using BankBlazor.Api.Models;
 //using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

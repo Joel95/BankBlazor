@@ -1,6 +1,6 @@
 ﻿using BankBlazor.Api.Models;
 
-namespace BankBlazor.Api.Data.Entities
+namespace BankBlazor.Api.Models
 {
     public class Customer
     {

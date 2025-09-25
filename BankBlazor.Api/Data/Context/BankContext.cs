@@ -1,5 +1,4 @@
-﻿using BankBlazor.Api.Data.Entities;
-using BankBlazor.Api.Models;
+﻿using BankBlazor.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 

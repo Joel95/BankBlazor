@@ -1,4 +1,4 @@
-﻿namespace BankBlazor.Api.Data.Entities
+﻿namespace BankBlazor.Api.Models
 {
     public class Transaction
     {
@@ -9,3 +9,4 @@
         public DateTime Date { get; set; } = DateTime.Now;
     }
 }
+

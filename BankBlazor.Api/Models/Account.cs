@@ -1,5 +1,4 @@
-﻿using BankBlazor.Api.Data.Entites;
-using BankBlazor.Api.Models;
+﻿using BankBlazor.Api.Models;
 
 namespace BankBlazor.Api.Models
 {
