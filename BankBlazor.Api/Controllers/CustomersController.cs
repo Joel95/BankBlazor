@@ -1,5 +1,7 @@
+using BankBlazor.Api.DTOs;
 using BankBlazor.Api.Data.Context;
 using BankBlazor.Api.Models;
+using BankBlazor.Api.Services;
 //using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,18 +12,17 @@ namespace BankBlazor.Api.Controllers;
 [Route("api/[controller]")]
 public class CustomersController : ControllerBase
 {
-    private readonly BankContext _context;
-    public CustomersController(BankContext context) => _context = context;
-
+    private readonly CustomerService _service;
+    public CustomersController(CustomerService service)
+    {
+        _service = service;
+    }
     [HttpGet("{id}")]
     public async Task<ActionResult<Customer>> GetCustomer(int id)
     {
-        var customer = await _context.Customers
-            .Include(c => c.Accounts)
-            .ThenInclude(a => a.Transactions)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var customer = await _service.GetCustomersAsync(id);
 
         if (customer == null) return NotFound();
-        return customer;
+        return Ok(customer);
     }
 }

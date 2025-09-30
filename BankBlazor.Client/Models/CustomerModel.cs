@@ -7,6 +7,6 @@
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
 
-        public List<AccountModel> AccountModels { get; set; } = new List<AccountModel>();
+        //public List<AccountModel> AccountModels { get; set; } = new List<AccountModel>();
     }
 }

@@ -1,0 +1,89 @@
+﻿using BankBlazor.Api.Data.Context;
+using BankBlazor.Api.Models;
+
+namespace BankBlazor.Api.Services
+{
+    public class AccountService
+    {
+        private readonly BankContext _context;
+        public AccountService(BankContext context) 
+        {
+            _context = context;
+        }
+
+        public async Task<bool> DepositAsync(int accountId, decimal amount)
+        {
+            var account = await _context.Accounts.FindAsync(accountId);
+            if (account == null) return false;
+            account.Balance += amount;
+            _context.Transactions.Add(new Transaction
+            {
+                AccountId = accountId,
+                Type = "Deposit",
+                Amount = amount,
+                Date = DateTime.UtcNow
+            });
+            await _context.SaveChangesAsync();
+            return true;
+
+        }
+
+        public async Task<bool> WithdrawAsync(int accountId, decimal amount)
+        {
+            var account = await _context.Accounts.FindAsync(accountId);
+            if (account == null || account.Balance < amount) return false;
+            account.Balance -= amount;
+            _context.Transactions.Add(new Transaction
+            {
+                AccountId = accountId,
+                Type = "Withdraw",
+                Amount = amount,
+                Date = DateTime.UtcNow
+            });
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> TransferAsync(int fromAccountId, int toAccountId, decimal amount)
+        {
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var fromAccount = await _context.Accounts.FindAsync(fromAccountId);
+                var toAccount = await _context.Accounts.FindAsync(toAccountId);
+
+                if (fromAccount == null || toAccount == null || fromAccount.Balance < amount) return false;
+
+                fromAccount.Balance -= amount;
+                toAccount.Balance += amount;
+
+                _context.Transactions.Add(new Transaction
+                {
+                    AccountId = fromAccountId,
+                    Type = "Transfer Out",
+                    Amount = amount,
+                    Date = DateTime.Now
+                });
+                _context.Transactions.Add(new Transaction
+                {
+                    AccountId = toAccountId,
+                    Type = "Transfer In",
+                    Amount = amount,
+                    Date = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here as needed
+                await transaction.RollbackAsync();
+                return false;
+            }
+        }
+
+    }
+}

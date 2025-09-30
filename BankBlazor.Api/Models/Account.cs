@@ -5,6 +5,8 @@ namespace BankBlazor.Api.Models
     public class Account
     {
         public int Id { get; set; }
+
+        public string AccountType { get; set; } = "";
         public int CustomerId { get; set; }
         public Customer customer { get; set; } = null!;
         public string AccountNumber { get; set; } = "";
