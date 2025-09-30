@@ -1,59 +1,89 @@
 ﻿@page "/transactions"
 @using BankBlazor.Client.Models
+@using System.Net.Http.Json
+@inject HttpClient Http
+
 <PageTitle>Transactions</PageTitle>
 
 <h2>Account Transactions</h2>
 
 <div class="account">
-    <p><strong>Account Number:</strong> @accountNumber</p>
-    <p><strong>Balance:</strong> $@balance</p>
+	<p><strong>Account Number:</strong> @accountNumber</p>
+	<p><strong>Balance:</strong> $@balance</p>
 </div>
 
 <div class="buttons">
-    <button @onclick="Deposit">Deposit</button>
-    <button @onclick="Withdraw">Withdraw</button>
-    <button @onclick="Transfer">Transfer</button>
+	<button @onclick="() => MakeTransaction(" Deposit", 500)">Deposit</button>
+	<button @onclick="() => MakeTransaction(" Withdraw", 500)">Withdraw</button>
+	<button @onclick="() => MakeTransaction(" Transfer", 1000)">Transfer</button>
 </div>
 
-@if (!string.IsNullOrEmpty(message))
+@if (!string.IsnullOrEmpty(message))
 {
-    <p><em>@message</em></p>
+<p><em>@message</em>></p>
+}
+
+@if (transactions !== null && transactions.Any())
+{
+
+	<h3>Transaction History</h3>
+	@foreach (var t in transactions)
+	{
+
+		<li>@t.Date.ToShortDateString() -
+			@t.Type - $@t.Amount
+
+		</li>
+
+
+	}
+
 }
 
 @code {
-    private string accountNumber = "123456789";
-    private decimal balance = 5000m;
-    private string? message;
+	private string accountNumber = "123456789";
+	private decimal balance;
+	private string? message;
 
-    private void Deposit()
-    {
-        balance += 500;
-        message = "Deposited $500.";
-    }
 
-    private void Withdraw()
-    {
-        if (balance >= 500)
-        {
-            balance -= 500;
-            message = "Withdrew $500.";
-        }
-        else
-        {
-            message = "Insufficient funds.";
-        }
-    }
+	private List<TransactionModel>? transactions;
+	protected override async Task OnInitializedAsync()
+	{
+		transactions = await Http.GetFromJsonAsync<List<TransactionModel>>("api/transactions");
 
-    private void Transfer()
-    {
-        if (balance >= 1000)
-        {
-            balance -= 1000;
-            message = "Transferred $1000.";
-        }
-        else
-        {
-            message = "Insufficient funds for transfer.";
-        }
-    }
+		balance = 5000m;
+	}
+
+	private async Task MakeTransaction(string type, decimal amount)
+	{
+
+		var transaction = new TransactionModel
+		{
+			//för just nu bara
+			AccountId = 1,
+			Type = type,
+			Amount = amount,
+			Date = DateTime.Now
+		};
+
+		var response = await Http.PostAsJsonAsync("api/transactions", transaction);
+		if (response.IsSuccessStatusCode)
+		{
+			message = $"{type} of ${amount} successful!";
+			transaction?.Add(transaction);
+
+			balance = type switch
+			{
+			" Deposit" => balance + amount,
+			" Withdraw" => balance - amount,
+			" Transfer" => balance - amount,
+			_ => balance
+			};
+		}
+		else
+		{
+			message = "Transaction failed. Please try again.";
+		}
+	}
+
 }
