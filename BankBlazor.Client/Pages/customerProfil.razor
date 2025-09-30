@@ -24,25 +24,19 @@ else
 @code {
     [Parameter] public int id { get; set; }
 
-    private Customer? customer;
+    private CustomerModel? customer;
 
     protected override async Task OnInitializedAsync()
     {
-        // Här kan du koppla till API senare. Nu kör vi mockad data:
-        customer = new Customer
-            {
-                Id = id,
-                Name = "John Doe",
-                Email = "johndoe@email.com",
-                Phone = "+1234567890"
-            };
+        
+		customer = await Http.GetFromJsonAsync<CustomerModel>($"api/customers/{id}");
     }
-
-    public class Customer
+}
+  /* public class Customer
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-    }
-}
+    }*/
+
