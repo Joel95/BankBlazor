@@ -8,82 +8,76 @@
 <h2>Account Transactions</h2>
 
 <div class="account">
-	<p><strong>Account Number:</strong> @accountNumber</p>
-	<p><strong>Balance:</strong> $@balance</p>
+    <p><strong>Account Number:</strong> @accountNumber</p>
+    <p><strong>Balance:</strong> $@balance</p>
 </div>
 
 <div class="buttons">
-	<button @onclick="() => MakeTransaction(" Deposit", 500)">Deposit</button>
-	<button @onclick="() => MakeTransaction(" Withdraw", 500)">Withdraw</button>
-	<button @onclick="() => MakeTransaction(" Transfer", 1000)">Transfer</button>
+    <button @onclick='() => MakeTransaction("Deposit", 500)'>Deposit</button>
+    <button @onclick='() => MakeTransaction("Withdraw", 500)'>Withdraw</button>
+    <button @onclick='() => MakeTransaction("Transfer", 1000)'>Transfer</button>
 </div>
 
-@if (!string.IsnullOrEmpty(message))
+@if (!string.IsNullOrEmpty(message))
 {
-<p><em>@message</em>></p>
+    <p><em>@message</em></p>
 }
 
-@if (transactions !== null && transactions.Any())
+@if (transactions != null && transactions.Any())
 {
-
-	<h3>Transaction History</h3>
-	@foreach (var t in transactions)
-	{
-
-		<li>@t.Date.ToShortDateString() -
-			@t.Type - $@t.Amount
-
-		</li>
-
-
-	}
-
+    <h3>Transaction History</h3>
+    <ul>
+        @foreach (var t in transactions)
+        {
+            <li>@t.Date.ToShortDateString() - @t.Type - $@t.Amount</li>
+        }
+    </ul>
 }
 
 @code {
-	private string accountNumber = "123456789";
-	private decimal balance;
-	private string? message;
+    private string accountNumber = "123456789";
+    private decimal balance;
+    private string? message;
 
+    private List<TransactionModel>? transactions;
 
-	private List<TransactionModel>? transactions;
-	protected override async Task OnInitializedAsync()
-	{
-		transactions = await Http.GetFromJsonAsync<List<TransactionModel>>("api/transactions");
+    protected override async Task OnInitializedAsync()
+    {
+        transactions = await Http.GetFromJsonAsync<List<TransactionModel>>("api/transactions");
+        balance = 5000m; // placeholder tills du kopplar mot konto-API
+    }
 
-		balance = 5000m;
-	}
+    private async Task MakeTransaction(string type, decimal amount)
+    {
+        var transaction = new TransactionModel
+        {
+            AccountId = 1, // hårdkodat konto för test
+            Type = type,
+            Amount = amount,
+            Date = DateTime.Now
+        };
 
-	private async Task MakeTransaction(string type, decimal amount)
-	{
+        var response = await Http.PostAsJsonAsync("api/transactions", transaction);
 
-		var transaction = new TransactionModel
-		{
-			//för just nu bara
-			AccountId = 1,
-			Type = type,
-			Amount = amount,
-			Date = DateTime.Now
-		};
+        if (response.IsSuccessStatusCode)
+        {
+            message = $"{type} of ${amount} successful!";
 
-		var response = await Http.PostAsJsonAsync("api/transactions", transaction);
-		if (response.IsSuccessStatusCode)
-		{
-			message = $"{type} of ${amount} successful!";
-			transaction?.Add(transaction);
+            // Lägg till i listan så det syns direkt
+            transactions?.Insert(0, transaction);
 
-			balance = type switch
-			{
-			" Deposit" => balance + amount,
-			" Withdraw" => balance - amount,
-			" Transfer" => balance - amount,
-			_ => balance
-			};
-		}
-		else
-		{
-			message = "Transaction failed. Please try again.";
-		}
-	}
-
+            // Uppdatera saldot
+            balance = type switch
+            {
+                "Deposit" => balance + amount,
+                "Withdraw" => balance - amount,
+                "Transfer" => balance - amount,
+                _ => balance
+            };
+        }
+        else
+        {
+            message = "Transaction failed. Please try again.";
+        }
+    }
 }
