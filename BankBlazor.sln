@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankBlazor.Client", "BankBlazor.Client\BankBlazor.Client.csproj", "{424CB4AA-BEC3-479A-A99E-930490CB75E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankBlazor.Api", "BankBlazor.Api\BankBlazor.Api.csproj", "{FD4E4059-2D60-4CF2-B755-A19A729305F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{424CB4AA-BEC3-479A-A99E-930490CB75E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{424CB4AA-BEC3-479A-A99E-930490CB75E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{424CB4AA-BEC3-479A-A99E-930490CB75E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4E4059-2D60-4CF2-B755-A19A729305F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4E4059-2D60-4CF2-B755-A19A729305F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4E4059-2D60-4CF2-B755-A19A729305F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4E4059-2D60-4CF2-B755-A19A729305F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
