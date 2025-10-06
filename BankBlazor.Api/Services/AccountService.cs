@@ -1,7 +1,6 @@
 ﻿using BankBlazor.Api.Data.Entities;
+using BankBlazor.Api.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System.Security.Principal;
 
 namespace BankBlazor.Api.Services
 {
@@ -29,6 +28,9 @@ namespace BankBlazor.Api.Services
                 Balance = account.Balance,
                 Date = DateOnly.FromDateTime(DateTime.Now)
             });
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> WithdrawAsync(int accountId, decimal amount)
@@ -50,7 +52,13 @@ namespace BankBlazor.Api.Services
 
         }
 
-        public async Task<bool> TransferAsync(int fromAccountId, int toAccountId)
+        public async Task<Account?> GetAccountAsync(int accountId)
+        {
+            return await _context.Accounts.FindAsync(accountId);
+
+        }
+
+        public async Task<bool> TransferAsync(int fromAccountId, int toAccountId, decimal amount)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -58,9 +66,9 @@ namespace BankBlazor.Api.Services
             {
                 var fromAccount = await _context.Accounts.FindAsync(fromAccountId);
                 var toAccount = await _context.Accounts.FindAsync(toAccountId);
-                if (fromAccount == null || toAccount == null || fromAccount.Balance < 0)
+                if (fromAccount == null || toAccount == null || fromAccount.Balance < amount)
                     return false;
-                decimal amount = fromAccount.Balance;
+                
                 fromAccount.Balance -= amount;
                 toAccount.Balance += amount;
                 _context.Transactions.Add(new Transaction
