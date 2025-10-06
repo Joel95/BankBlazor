@@ -1,5 +1,5 @@
-﻿using BankBlazor.Api.Data.Entities;
-using BankBlazor.Api.Data.Context;
+﻿using BankBlazor.Api.Data.Context;
+using BankBlazor.Api.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankBlazor.Api.Services
