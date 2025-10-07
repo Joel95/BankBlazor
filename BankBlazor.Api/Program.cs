@@ -1,4 +1,7 @@
 
+using BankBlazor.Api.Data.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace BankBlazor.Api
 {
     public class Program
@@ -14,9 +17,15 @@ namespace BankBlazor.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<BankContext>(options => options.UseSqlServer
+            (builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<Services.CustomerService>();
+            builder.Services.AddScoped<Services.AccountService>();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
