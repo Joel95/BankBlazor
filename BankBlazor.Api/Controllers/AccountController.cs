@@ -14,11 +14,11 @@ namespace BankBlazor.Api.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("id")]
+        [HttpGet("id")]
 
         public async Task<IActionResult> GetAccount(int id)
         {
-            var account = await _accountService.GetAccountByIdAsync(id);
+            var account = await _accountService.GetAccountAsync(id);
             if (account == null) return NotFound();
             return Ok(account);
         }
