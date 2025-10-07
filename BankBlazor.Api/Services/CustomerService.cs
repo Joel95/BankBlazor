@@ -28,7 +28,7 @@ namespace BankBlazor.Api.Services
                 Id = customer.CustomerId,
                 Name = $"{customer.Givenname} {customer.Surname}",
                 Email = customer.Emailaddress,
-                Phone = customer.TelephoneNumber,
+                Phone = customer.Telephonenumber,
                 Accounts = customer.Dispositions
                 .Select(d => new AccountDTO
                 {
@@ -48,4 +48,5 @@ namespace BankBlazor.Api.Services
             };
 
         }
+    }
 }
