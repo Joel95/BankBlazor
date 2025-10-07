@@ -1,5 +1,7 @@
 ﻿using BankBlazor.Api.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using BankBlazor.Api.Data.Entities;
+using BankBlazor.Api.DTOs;
 
 namespace BankBlazor.Api.Services
 {
@@ -11,7 +13,7 @@ namespace BankBlazor.Api.Services
             _context = context;
         }
 
-        public async Task<CustomerDTO>> GetCustomerAsync(int id)
+        public async Task<CustomerDTO?> GetCustomerAsync(int id)
         {
             var customer = await _context.Customers
                   .Include(c => c.Dispositions)
@@ -21,20 +23,19 @@ namespace BankBlazor.Api.Services
 
             if (customer == null) return null;
 
-            return new customerDTO
+            return new CustomerDTO
             {
                 Id = customer.CustomerId,
-                Name = $"{customer.Givenname} {customer.Surname}"
+                Name = $"{customer.Givenname} {customer.Surname}",
                 Email = customer.Emailaddress,
-                Phone = customer.TelephoneNumber,,
+                Phone = customer.TelephoneNumber,
                 Accounts = customer.Dispositions
-                .Select(d => d.Account
                 .Select(d => new AccountDTO
                 {
-                    Id = AccountId,
-                    Balance = a.Balance,
-                    Frequency = a.Frequency,
-                    Transactions = a.Transactions.Select(t => new TransactionDTO
+                    Id = d.Account.AccountId,
+                    Balance = d.Account.Balance,
+                    Frequency = d.Account.Frequency,
+                    Transactions = d.Account.Transactions.Select(t => new TransactionDTO
                     {
                         Id = t.TransactionId,
                         Amount = t.Amount,
