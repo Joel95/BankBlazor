@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BankBlazor.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly AccountService _accountService;
@@ -14,7 +14,7 @@ namespace BankBlazor.Api.Controllers
             _accountService = accountService;
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
 
         public async Task<IActionResult> GetAccount(int id)
         {
