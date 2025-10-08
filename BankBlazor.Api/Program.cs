@@ -24,7 +24,6 @@ namespace BankBlazor.Api
             builder.Services.AddScoped<Services.AccountService>();
 
             var app = builder.Build();
-
             
             if (app.Environment.IsDevelopment())
             {
