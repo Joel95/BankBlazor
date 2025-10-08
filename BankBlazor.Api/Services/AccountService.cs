@@ -22,7 +22,7 @@ namespace BankBlazor.Api.Services
             _context.Transactions.Add(new Transaction
             {
                 AccountId = accountId,
-                Type = "Deposit",
+                Type = "Credit",
                 Operation = "Cash Deposit",
                 Amount = amount,
                 Balance = account.Balance,
@@ -41,7 +41,7 @@ namespace BankBlazor.Api.Services
             _context.Transactions.Add(new Transaction
             {
                 AccountId = accountId,
-                Type = "Withdrawal",
+                Type = "Debit",
                 Operation = "Cash Withdrawal",
                 Amount = amount,
                 Balance = account.Balance,
@@ -74,7 +74,7 @@ namespace BankBlazor.Api.Services
                 _context.Transactions.Add(new Transaction
                 {
                     AccountId = fromAccountId,
-                    Type = "Transfer out",
+                    Type = "Debit",
                     Operation = $"Transfer to Account {toAccountId}",
                     Amount = amount,
                     Balance = fromAccount.Balance,
@@ -83,7 +83,7 @@ namespace BankBlazor.Api.Services
                 _context.Transactions.Add(new Transaction
                 {
                     AccountId = toAccountId,
-                    Type = "Transfer In ",
+                    Type = "Credit",
                     Operation = $"Transfer from Account {fromAccountId}",
                     Amount = amount,
                     Balance = toAccount.Balance,
