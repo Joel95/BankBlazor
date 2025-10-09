@@ -1,4 +1,5 @@
-﻿namespace BankBlazor.Client.Services
+﻿using System.Net.Http.Json;
+namespace BankBlazor.Client.Services
 {
     public class TransactionServiceClient
     {

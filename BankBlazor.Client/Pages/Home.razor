@@ -1,34 +1,87 @@
 ﻿@page "/"
+@using System.Net.Http.Json
+@using BankBlazor.Client.DTOs
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+
 
 <PageTitle>Home</PageTitle>
 
 <section class="hero-container">
     <div class="hero-content">
-        <img src="/images/hero.jpg" class="hero-img">
+        <img src="/images/hero.jpg" class="hero-img"/>
     </div>
 </section>
 
 <section id="greeting" class="container">
-    <h2>Hello Admin! The next Scottish bank holiday is <strong>{holiday}</strong> on <strong>{date}</strong></h2>
+    <h2>Welcome to Bank Blazor Admin</h2>
+	<p>Here you can view Customer information and manage accounts.</p>
 </section>
 
 
 <section id="dashboard" class="container">
     <h2>Customer Dashboard</h2>
-    <div class="info">
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Email:</strong> johndoe@email.com</p>
-        <p><strong>Phone:</strong> +1234567890</p>
-    </div>
+
+	@if (customer != null)
+	{
+		<div class="info">
+			<p><strong>Name:</strong> @customer.Name</p>
+            <p><strong>Email:</strong> @customer.Email</p>
+            <p><strong>Phone:</strong> @customer.Phone</p>
+		</div>
+	}
+	else
+	{
+		<p>Loading customer information...</p>
+	}
 </section>
 
-<section id="transactions" class="container">
-    <h2>Account Transactions</h2>
-    <div class="account">
-        <p><strong>Account Number:</strong> 123456789</p>
-        <p><strong>Balance:</strong> $5,000</p>
-    </div>
-    <button>Deposit</button>
-    <button>Withdraw</button>
-    <button>Transfer</button>
+<section id="transactions-info" class="container">
+	<h2>Account Information</h2>
+
+	@if (customer?.Accounts != null && customer.Accounts.Any())
+	{
+		var account = customer.Accounts.First();
+		
+			<div class="account">
+				<p><strong>Account Number:</strong> @account.Id</p>
+				<p><strong>Balance:</strong> $@account.Balance</p>
+			</div>
+
+		<button @onclick="() => NavigateToTransaction("deposit")">Deposit</button>
+		<button @onclick="() => NavigateToTransaction("withdraw")">Withdraw</button>
+		<button @onclick="() => NavigateToTransaction("transfer")">Transfer</button>
+
+	}
+	else
+	{
+		<p>No accounts found</p>
+	})
 </section>
+
+@code
+{
+	private CustomerDTO customer;
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadCustomerData();
+	}
+
+	private async Task LoadCustomerData()
+	{
+		try
+		{
+			customer = await Http.GetFromJsonAsync<CustomerDTO>("api/customer/1");
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error fetching customer data: {ex.Message}");
+		}
+	}
+	private void NavigateToTransaction(string type)
+	{
+		// Navigation logic to transaction page
+		Navigation.NavigateTo($"/transactions/{type}");
+	}
+}
