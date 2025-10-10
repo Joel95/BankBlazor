@@ -14,7 +14,7 @@ public class Program
 
         builder.Services.AddScoped(sp => new HttpClient 
         { 
-            BaseAddress = new Uri("https://localhost:7164")
+            BaseAddress = new Uri("https://localhost:7164/")
         });
 
         builder.Services.AddScoped<Services.CustomerServiceClient>();

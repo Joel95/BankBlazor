@@ -23,7 +23,12 @@
 <section id="dashboard" class="container">
     <h2>Customer Dashboard</h2>
 
-	@if (customer != null)
+	@if(isLoading)
+	{
+		<p>Loading customer information...</p>
+	}
+
+	else if (customer != null)
 	{
 		<div class="info">
 			<p><strong>Name:</strong> @customer.Name</p>
@@ -33,36 +38,39 @@
 	}
 	else
 	{
-		<p>Loading customer information...</p>
+		<p>No customer data found.</p>
 	}
 </section>
 
 <section id="transactions-info" class="container">
 	<h2>Account Information</h2>
 
-	@if (customer?.Accounts != null && customer.Accounts.Any())
+	@if (customer?.Accounts?.Any() == true)
 	{
 		var account = customer.Accounts.First();
 		
 			<div class="account">
-				<p><strong>Account Number:</strong> @account.Id</p>
+				<p><strong>Account ID:</strong> @account.Id</p>
 				<p><strong>Balance:</strong> $@account.Balance</p>
 			</div>
 
-		<button @onclick="() => NavigateToTransaction("deposit")">Deposit</button>
-		<button @onclick="() => NavigateToTransaction("withdraw")">Withdraw</button>
-		<button @onclick="() => NavigateToTransaction("transfer")">Transfer</button>
-
+	<div class="transaction-buttons">
+		<button @onclick="@(() => NavigateToTransaction("deposit"))">Deposit</button>
+		<button @onclick="@(() => NavigateToTransaction("withdraw"))">Withdraw</button>
+		<button @onclick="@(() => NavigateToTransaction("transfer"))">Transfer</button>
+		</div>
 	}
-	else
+	else if (!isLoading)
 	{
 		<p>No accounts found</p>
-	})
+	}
 </section>
 
 @code
 {
-	private CustomerDTO customer;
+	private CustomerDTO? customer;
+	private bool isLoading = true;
+
 	protected override async Task OnInitializedAsync()
 	{
 		await LoadCustomerData();
@@ -77,6 +85,10 @@
 		catch (Exception ex)
 		{
 			Console.WriteLine($"Error fetching customer data: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
 		}
 	}
 	private void NavigateToTransaction(string type)

@@ -1,0 +1,32 @@
+﻿@page "/transactions/deposit"
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using BankBlazor.Client.DTOs
+
+<h3>Deposit</h3>
+
+<div
+	<label>Account ID: </label>
+	<input type="number" @bind="accountId" />
+
+	<label> Amount: </label>
+	<input type="number" @bind="amount" />
+
+	<button @onclick="DepositAsync">Deposit</button>
+</div>
+
+<p>@message</p>
+
+@code
+{
+	private int accountId;
+	private decimal amount;
+	private string message = string.Empty;
+
+	private async Task DepositAsync()
+	{
+		var response = await Http.PostAsync($"api/account/deposit?accountId={accountId}&amount={amount}", null);
+		message = response.IsSuccessStatusCode ? "Deposit successful!" : "Deposit failed.";
+
+	}
+}
