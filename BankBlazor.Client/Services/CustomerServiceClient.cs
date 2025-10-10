@@ -11,7 +11,7 @@ namespace BankBlazor.Client.Services
         }
         public async Task<DTOs.CustomerDTO?> GetCustomerAsync(int id)
         {
-            return await _httpClient.GetFromJsonAsync<DTOs.CustomerDTO>($"api/customers/{id}");
+            return await _httpClient.GetFromJsonAsync<DTOs.CustomerDTO>($"api/customer/{id}");
         }
     }
 }
