@@ -23,6 +23,16 @@ namespace BankBlazor.Api
             builder.Services.AddScoped<Services.CustomerService>();
             builder.Services.AddScoped<Services.AccountService>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowClient",policy =>
+                {
+                    policy.WithOrigins("https://localhost:7249" , "https://localhost:5279") // React app URL
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
             
             if (app.Environment.IsDevelopment())
@@ -32,6 +42,8 @@ namespace BankBlazor.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowClient");
 
             app.UseAuthorization();
 
