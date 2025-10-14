@@ -55,9 +55,9 @@
 			</div>
 
 	<div class="transaction-buttons">
-		<button @onclick="@(() => NavigateToTransaction("deposit"))">Deposit</button>
-		<button @onclick="@(() => NavigateToTransaction("withdraw"))">Withdraw</button>
-		<button @onclick="@(() => NavigateToTransaction("transfer"))">Transfer</button>
+		<button @onclick="@(() => NavigateToTransaction("Deposit"))">Deposit</button>
+		<button @onclick="@(() => NavigateToTransaction("Withdraw"))">Withdraw</button>
+		<button @onclick="@(() => NavigateToTransaction("Transfer"))">Transfer</button>
 		</div>
 	}
 	else if (!isLoading)
@@ -80,7 +80,7 @@
 	{
 		try
 		{
-			customer = await Http.GetFromJsonAsync<CustomerDTO>("api/customer/1");
+			customer = await Http.GetFromJsonAsync<CustomerDTO>("api/Customer/1")?? new CustomerDTO();
 		}
 		catch (Exception ex)
 		{
