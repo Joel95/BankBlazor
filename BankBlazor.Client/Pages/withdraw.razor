@@ -12,7 +12,7 @@
 	<label> Amount: </label>
 	<input type="number" @bind="amount" />
 
-	<button @onclick="DepositAsync">Deposit</button>
+	<button @onclick="WithdrawAsync">Witdraw</button>
 </div>
 
 <p>@message</p>
@@ -23,10 +23,10 @@
 	private decimal amount;
 	private string message = string.Empty;
 
-	private async Task DepositAsync()
+	private async Task WithdrawAsync()
 	{
-		var response = await Http.PostAsync($"api/account/deposit?accountId={accountId}&amount={amount}", null);
-		message = response.IsSuccessStatusCode ? "Deposit successful!" : "Deposit failed.";
+		var response = await Http.PostAsync($"api/account/Withdraw?accountId={accountId}&amount={amount}", null);
+		message = response.IsSuccessStatusCode ? "Withdraw successful!" : "Withdraw failed.";
 
 	}
 }
