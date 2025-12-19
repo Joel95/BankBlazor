@@ -7,21 +7,21 @@
 
 <div>
 	<label>From Account ID: </label>
-	<input type="number" @bind="fromAccountId"/>
+	<input type="number" @bind="fromAccountId" />
 
 	<label> To Account ID: </label>
-	<input type="number"@bind="toAccountId" />
+	<input type="number" @bind="toAccountId" />
 
 	<label> Amount: </label>
-	<input type="number"@bind="amount" />
+	<input type="number" @bind="amount" />
 
 	<button @onclick="TransferAsync">Transfer</button>
-	
+
 </div>
 
 <p>@message</p>
 
-@code 
+@code
 {
 	private int fromAccountId;
 	private int toAccountId;
