@@ -1,0 +1,32 @@
+﻿@page "/Transactions/Withdraw"
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using BankBlazor.Client.DTOs
+
+<h3>Withdraw</h3>
+
+<div>
+	<label>Account ID: </label>
+	<input type="number" @bind="accountId" />
+
+	<label> Amount: </label>
+	<input type="number" @bind="amount" />
+
+	<button @onclick="WithdrawAsync">Witdraw</button>
+</div>
+
+<p>@message</p>
+
+@code
+{
+	private int accountId;
+	private decimal amount;
+	private string message = string.Empty;
+
+	private async Task WithdrawAsync()
+	{
+		var response = await Http.PostAsync($"api/account/Withdraw?accountId={accountId}&amount={amount}", null);
+		message = response.IsSuccessStatusCode ? "Withdraw successful!" : "Withdraw failed."; 
+
+	}
+}

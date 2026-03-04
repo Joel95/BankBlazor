@@ -1,0 +1,37 @@
+﻿@page "/transactions/Transfer" 
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+
+<h3>Transfer</h3>
+
+<div>
+	<label>From Account ID: </label>
+	<input type="number" @bind="fromAccountId" />
+
+	<label> To Account ID: </label>
+	<input type="number" @bind="toAccountId" />
+
+	<label> Amount: </label>
+	<input type="number" @bind="amount" />
+
+	<button @onclick="TransferAsync">Transfer</button>
+
+</div>
+
+<p>@message</p>
+
+@code
+{
+	private int fromAccountId;
+	private int toAccountId;
+	private decimal amount;
+	private string message = string.Empty;
+
+	private async Task TransferAsync()
+	{
+		var response = await Http.PostAsync($"api/account/transfer?fromAccountId={fromAccountId}&toAccountId={toAccountId}&amount={amount}", null);
+		message = response.IsSuccessStatusCode ? "Transfer successful!" : "Transfer failed.";
+
+	}
+}
