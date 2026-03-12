@@ -12,4 +12,8 @@ Detta är ett startrepository för den examinerande inlämningen i kursen System
 
 Göm inte att skriva en read me som förklarar appen och de verktyg ni använt er av!(Krav för Godkänt) Denna text är en read me.
 
+BankBlazor är ett grundläggande banksystem där användare kan hantera bankkonton och visa kundprofil. systemet stödjer även olika typer av transaktioner, så som uttag, insättningar och överförnig mellan konton. 
+
+Applikationen är byggd med Blazor för frontend, ASP.Net Core till Backend och Entity Framework Core användes som databashantering.
+
 
